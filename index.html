@@ -1,0 +1,1024 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Columbia Asia Hospital Healthcare Analytics case study by Deepika Raj, featuring Power BI dashboards, SQL analysis and business insights.">
+  <title>Columbia Asia Hospital | Healthcare Analytics</title>
+
+  <style>
+    :root {
+      --navy: #142b4a;
+      --blue: #2864b4;
+      --light-blue: #edf4fc;
+      --text: #344256;
+      --muted: #718096;
+      --border: #e5eaf1;
+      --background: #ffffff;
+      --surface: #f7f9fc;
+      --green: #16866b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: var(--background);
+      line-height: 1.7;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, 90%);
+      margin: auto;
+    }
+
+    /* Navigation */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+    }
+
+    .brand span {
+      color: var(--blue);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--blue);
+    }
+
+    /* Hero */
+
+    .hero {
+      padding: 85px 0 55px;
+      background: linear-gradient(135deg, #f5f8fd, #ffffff 65%);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--blue);
+      background: var(--light-blue);
+      padding: 7px 14px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      color: var(--navy);
+      font-size: clamp(36px, 5.5vw, 59px);
+      line-height: 1.13;
+      letter-spacing: -2px;
+      max-width: 850px;
+      margin-bottom: 20px;
+    }
+
+    .hero-description {
+      max-width: 730px;
+      color: var(--muted);
+      font-size: 17px;
+      margin-bottom: 28px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 30px;
+    }
+
+    .tag {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--navy);
+      border-radius: 7px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 21px;
+      border-radius: 7px;
+      font-size: 14px;
+      font-weight: 700;
+      transition: 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--navy);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--blue);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--navy);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    /* Statistics */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding: 35px 0 55px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid var(--border);
+      padding: 23px;
+      border-radius: 11px;
+      box-shadow: 0 5px 20px rgba(20,43,74,0.035);
+    }
+
+    .stat-number {
+      font-size: 29px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -1px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* General sections */
+
+    section.content-section {
+      padding: 75px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      color: var(--blue);
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      margin-bottom: 9px;
+    }
+
+    h2 {
+      font-size: 31px;
+      line-height: 1.25;
+      color: var(--navy);
+      letter-spacing: -0.8px;
+      margin-bottom: 14px;
+    }
+
+    .section-intro {
+      max-width: 740px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      font-size: 15px;
+    }
+
+    /* Dashboard previews */
+
+    .dashboard-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 32px;
+      background: white;
+      box-shadow: 0 8px 28px rgba(20,43,74,0.05);
+    }
+
+    .dashboard-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: var(--surface);
+      cursor: zoom-in;
+    }
+
+    .dashboard-info {
+      padding: 23px 25px;
+    }
+
+    .dashboard-info h3 {
+      color: var(--navy);
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .dashboard-info p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* Cards and grids */
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .info-card {
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: white;
+    }
+
+    .info-card h3 {
+      color: var(--navy);
+      font-size: 17px;
+      margin-bottom: 10px;
+    }
+
+    .info-card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .tool-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tool {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 12px 17px;
+      border-radius: 8px;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* Findings */
+
+    .findings {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .findings th, .findings td {
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .findings th {
+      background: var(--surface);
+      color: var(--navy);
+    }
+
+    .findings td:last-child {
+      font-weight: 750;
+      color: var(--blue);
+    }
+
+    .recommendations {
+      margin-top: 28px;
+      display: grid;
+      gap: 13px;
+    }
+
+    .recommendation {
+      border-left: 3px solid var(--blue);
+      padding: 14px 18px;
+      background: var(--light-blue);
+      border-radius: 0 7px 7px 0;
+      font-size: 14px;
+    }
+
+    .recommendation strong {
+      color: var(--navy);
+    }
+
+    /* Methodology */
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 13px;
+      margin-top: 30px;
+    }
+
+    .step {
+      padding: 19px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .step-number {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--light-blue);
+      color: var(--blue);
+      font-weight: 800;
+      margin-bottom: 13px;
+    }
+
+    .step h3 {
+      color: var(--navy);
+      font-size: 15px;
+      margin-bottom: 7px;
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Limitations */
+
+    .note {
+      padding: 23px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .note ul {
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    /* Footer */
+
+    footer {
+      background: var(--navy);
+      color: white;
+      padding: 45px 0;
+      text-align: center;
+    }
+
+    footer h2 {
+      color: white;
+      font-size: 25px;
+    }
+
+    footer p {
+      color: #c2d0e2;
+      font-size: 13px;
+      margin: 8px 0 20px;
+    }
+
+    footer .btn-secondary {
+      background: white;
+    }
+
+    .footer-small {
+      margin-top: 28px;
+      color: #a9bbd1;
+      font-size: 11px;
+    }
+
+    @media (max-width: 800px) {
+      .nav-links {
+        gap: 12px;
+        font-size: 11px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 550px) {
+      nav {
+        padding: 14px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+      }
+
+      .hero {
+        padding-top: 55px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-number {
+        font-size: 24px;
+      }
+
+      .stat-card {
+        padding: 17px;
+      }
+
+      .findings {
+        font-size: 12px;
+      }
+
+      .findings th, .findings td {
+        padding: 10px 7px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+
+  <header>
+    <div class="container">
+      <nav>
+        <a href="#" class="brand">Deepika<span>.</span></a>
+
+        <div class="nav-links">
+          <a href="#overview">Overview</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#methodology">Methodology</a>
+          <a href="#findings">Findings</a>
+          <a href="#contact">Project Links</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+
+  <main>
+    <section class="hero" id="overview">
+      <div class="container">
+
+        <span class="eyebrow">Healthcare Analytics · Data Analytics Case Study</span>
+
+        <h1>Columbia Asia Hospital<br>Healthcare Analytics</h1>
+
+        <p class="hero-description">
+          Transforming hospital data into actionable business insights.
+          An end-to-end analytical project using Power BI, SQL, Power Query
+          and Excel to investigate hospital operations, doctor performance,
+          patient trends and revenue generation.
+        </p>
+
+        <div class="tags">
+          <span class="tag">Power BI</span>
+          <span class="tag">SQL / MySQL</span>
+          <span class="tag">DAX</span>
+          <span class="tag">Power Query</span>
+          <span class="tag">Excel</span>
+        </div>
+
+        <div class="buttons">
+          <a class="btn btn-primary"
+             href="#dashboard">Explore Dashboard ↓</a>
+
+          <a class="btn btn-secondary"
+             href="https://github.com/IAmDeepikaRaj/Columbia-Asia-Hospital-Analytics"
+             target="_blank" rel="noopener">View GitHub Repository ↗</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PROJECT STATISTICS -->
+
+    <div class="container">
+      <div class="stats">
+
+        <div class="stat-card">
+          <div class="stat-number">9,216</div>
+          <div class="stat-label">Patient Records</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-number">22</div>
+          <div class="stat-label">Doctors</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-number">7</div>
+          <div class="stat-label">Departments</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-number">19</div>
+          <div class="stat-label">Months Analysed</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PROJECT OVERVIEW -->
+
+    <section class="content-section">
+      <div class="container">
+
+        <div class="section-label">01 / Project Overview</div>
+        <h2>Understanding Hospital Performance</h2>
+
+        <p class="section-intro">
+          This project analyses patient, doctor and billing data from
+          April 2019 to October 2020. The goal was to understand operational
+          performance, evaluate revenue generation and develop practical,
+          data-driven recommendations for hospital management.
+        </p>
+
+        <div class="grid-2">
+
+          <div class="info-card">
+            <h3>Business Problem</h3>
+            <p>
+              Hospital management needs to understand which departments
+              generate revenue, where doctor workload is concentrated,
+              how patients experience healthcare services and where
+              operational improvements are required.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <h3>Project Objectives</h3>
+            <p>
+              Evaluate department revenue, analyse doctor performance,
+              investigate patient demographics and satisfaction,
+              understand waiting-time patterns and recommend hiring
+              and discount strategies.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+
+    <section class="content-section" id="dashboard">
+      <div class="container">
+
+        <div class="section-label">02 / Power BI Report</div>
+        <h2>Interactive Hospital Dashboard</h2>
+
+        <p class="section-intro">
+          A three-page Power BI report designed to provide different
+          perspectives on hospital performance through KPIs, slicers,
+          interactive visualisations and dynamic analysis.
+        </p>
+
+        <div class="dashboard-card">
+          <img
+            src="Screenshots/01_Main_Dashboard.png"
+            alt="Columbia Asia Hospital Main Dashboard"
+            class="dashboard-image"
+            loading="lazy">
+
+          <div class="dashboard-info">
+            <h3>01. Main Dashboard</h3>
+            <p>
+              Hospital-wide performance overview featuring revenue,
+              patient visits, average waiting time, department analysis
+              and monthly visit trends.
+            </p>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <img
+            src="Screenshots/02_Doctors_Dashboard.png"
+            alt="Doctor Performance Dashboard"
+            class="dashboard-image"
+            loading="lazy">
+
+          <div class="dashboard-info">
+            <h3>02. Doctors Dashboard</h3>
+            <p>
+              Doctor-level analysis covering patient distribution,
+              revenue contribution, satisfaction scores and
+              performance comparisons.
+            </p>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <img
+            src="Screenshots/03_Patients_Dashboard.png"
+            alt="Patient Analytics Dashboard"
+            class="dashboard-image"
+            loading="lazy">
+
+          <div class="dashboard-info">
+            <h3>03. Patients Dashboard</h3>
+            <p>
+              Patient-level exploration of demographics, waiting time,
+              individual profiles and discount eligibility.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- METHODOLOGY -->
+
+    <section class="content-section" id="methodology">
+      <div class="container">
+
+        <div class="section-label">03 / Methodology</div>
+        <h2>From Raw Data to Business Insights</h2>
+
+        <p class="section-intro">
+          The analysis followed a structured workflow covering
+          data preparation, transformation, modelling, analytical
+          calculations and reporting.
+        </p>
+
+        <div class="steps">
+
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>Load</h3>
+            <p>Imported two Excel datasets into Power BI.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>Clean</h3>
+            <p>Handled missing values, duplicates, data types and text inconsistencies.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Model</h3>
+            <p>Designed a fact and dimension table model with date relationships.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">4</div>
+            <h3>Analyse</h3>
+            <p>Created DAX measures and SQL queries for analytical questions.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">5</div>
+            <h3>Visualise</h3>
+            <p>Developed interactive dashboards and business recommendations.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TOOLS -->
+
+    <section class="content-section">
+      <div class="container">
+
+        <div class="section-label">04 / Technology Stack</div>
+        <h2>Tools & Technologies</h2>
+
+        <p class="section-intro">
+          Technologies used throughout the data preparation,
+          analysis and reporting process.
+        </p>
+
+        <div class="tool-grid">
+          <span class="tool">Microsoft Power BI</span>
+          <span class="tool">MySQL</span>
+          <span class="tool">DAX</span>
+          <span class="tool">Power Query / M</span>
+          <span class="tool">Microsoft Excel</span>
+          <span class="tool">Data Modelling</span>
+          <span class="tool">Data Visualisation</span>
+          <span class="tool">Statistical Analysis</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SQL -->
+
+    <section class="content-section">
+      <div class="container">
+
+        <div class="section-label">05 / SQL Analysis</div>
+        <h2>Analytical SQL Techniques</h2>
+
+        <p class="section-intro">
+          SQL was used to investigate hospital performance through
+          aggregation, conditional logic and advanced analytical queries.
+        </p>
+
+        <div class="grid-2">
+
+          <div class="info-card">
+            <h3>Querying & Aggregation</h3>
+            <p>
+              Common Table Expressions, GROUP BY, aggregate functions,
+              CASE WHEN and conditional aggregation.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <h3>Window Functions</h3>
+            <p>
+              LAG and ranking functions to analyse monthly waiting-time
+              changes and compare doctor performance.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <h3>Revenue Analysis</h3>
+            <p>
+              Compared doctor and department revenue, patient volumes
+              and billing patterns.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <h3>Diversity Analysis</h3>
+            <p>
+              Applied Simpson's Diversity Index to evaluate the
+              distribution of patient groups across doctors.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FINDINGS -->
+
+    <section class="content-section" id="findings">
+      <div class="container">
+
+        <div class="section-label">06 / Analytical Results</div>
+        <h2>Key Findings</h2>
+
+        <p class="section-intro">
+          The analysis revealed several patterns in department
+          performance, patient experience and revenue distribution.
+        </p>
+
+        <div style="overflow-x:auto;">
+          <table class="findings">
+
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Finding</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Total Hospital Revenue</td>
+                <td>509.31M</td>
+              </tr>
+
+              <tr>
+                <td>Patient Records</td>
+                <td>9,216</td>
+              </tr>
+
+              <tr>
+                <td>Highest Revenue Department</td>
+                <td>Orthopedics</td>
+              </tr>
+
+              <tr>
+                <td>General Practice Visits</td>
+                <td>78.6%</td>
+              </tr>
+
+              <tr>
+                <td>Average Waiting Time</td>
+                <td>35.26 minutes</td>
+              </tr>
+
+              <tr>
+                <td>Patients Treated by Dr. Smith</td>
+                <td>5,986</td>
+              </tr>
+
+              <tr>
+                <td>Satisfaction Response Rate</td>
+                <td>27.3%</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+
+        <h2 style="font-size:23px;margin-top:40px;">
+          Business Recommendations
+        </h2>
+
+        <div class="recommendations">
+
+          <div class="recommendation">
+            <strong>Doctor Hiring:</strong>
+            Prioritise General Practice and Orthopedics based on
+            doctor workload and revenue contribution.
+          </div>
+
+          <div class="recommendation">
+            <strong>Patient Discounts:</strong>
+            Introduce transparent, rule-based discount strategies
+            based on waiting times, bill amounts and age groups.
+          </div>
+
+          <div class="recommendation">
+            <strong>Patient Experience:</strong>
+            Improve feedback collection to obtain more reliable
+            patient satisfaction insights.
+          </div>
+
+          <div class="recommendation">
+            <strong>Future Data Collection:</strong>
+            Collect cost and repeat-visit data to support
+            profitability and patient retention analysis.
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- LIMITATIONS -->
+
+    <section class="content-section">
+      <div class="container">
+
+        <div class="section-label">07 / Data Considerations</div>
+        <h2>Project Limitations</h2>
+
+        <div class="note">
+          The findings should be interpreted in the context of
+          the available dataset.
+
+          <ul>
+            <li>Only 27.3% of patients had recorded satisfaction scores.</li>
+            <li>Cost data was unavailable, so actual profitability could not be calculated.</li>
+            <li>Each patient appears once in the dataset, limiting repeat-visit analysis.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PROJECT LINKS -->
+
+    <section class="content-section" id="contact">
+      <div class="container">
+
+        <div class="section-label">08 / Explore the Work</div>
+        <h2>Project Resources</h2>
+
+        <p class="section-intro">
+          Explore the source files, SQL queries and supporting
+          documentation in the GitHub repository.
+        </p>
+
+        <div class="grid-2">
+
+          <div class="info-card">
+            <h3>Power BI Dashboard</h3>
+            <p>Access the dashboard project files.</p>
+            <br>
+            <a class="btn btn-secondary"
+               href="Dashboard/"
+               target="_blank" rel="noopener">View Dashboard Files ↗</a>
+          </div>
+
+          <div class="info-card">
+            <h3>SQL Queries</h3>
+            <p>Explore the SQL analysis and queries.</p>
+            <br>
+            <a class="btn btn-secondary"
+               href="SQL/"
+               target="_blank" rel="noopener">View SQL Files ↗</a>
+          </div>
+
+          <div class="info-card">
+            <h3>Project Documentation</h3>
+            <p>View the project presentation and detailed report.</p>
+            <br>
+            <a class="btn btn-secondary"
+               href="Documentation/"
+               target="_blank" rel="noopener">View Documentation ↗</a>
+          </div>
+
+          <div class="info-card">
+            <h3>GitHub Repository</h3>
+            <p>Explore the complete project and source materials.</p>
+            <br>
+            <a class="btn btn-primary"
+               href="https://github.com/IAmDeepikaRaj/Columbia-Asia-Hospital-Analytics"
+               target="_blank" rel="noopener">Explore Repository ↗</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+
+  <footer>
+    <div class="container">
+      <h2>Thank You for Exploring!</h2>
+
+      <p>
+        A healthcare analytics case study by Deepika Raj.
+      </p>
+
+      <a class="btn btn-secondary"
+         href="https://github.com/IAmDeepikaRaj"
+         target="_blank" rel="noopener">Visit My GitHub Profile ↗</a>
+
+      <div class="footer-small">
+        © 2026 Deepika Raj · Columbia Asia Hospital Analytics
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
