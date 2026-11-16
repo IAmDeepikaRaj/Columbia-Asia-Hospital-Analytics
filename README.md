@@ -1,6 +1,22 @@
 # Columbia Asia Hospital – Healthcare Analytics
 
+![Main Dashboard](Screenshots/01_Main_Dashboard.png)
+
 An end-to-end data analytics project combining **Power BI, SQL, Power Query and Excel** to analyse hospital operations, patient demographics, doctor performance and revenue generation.
+
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Tools & Technologies](#tools--technologies)
+- [Project Objectives](#project-objectives)
+- [Data Preparation & Modelling](#data-preparation--modelling)
+- [Power BI Dashboard](#power-bi-dashboard)
+- [SQL Analysis](#sql-analysis)
+- [Key Findings](#key-findings)
+- [Project Limitations](#project-limitations)
+- [Acknowledgements](#acknowledgements)
+
+---
 
 ## Project Overview
 
