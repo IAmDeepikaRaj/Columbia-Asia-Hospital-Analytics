@@ -50,6 +50,7 @@ Provides an overview of hospital performance, including revenue, patient visits,
 
 ![Main Dashboard](Screenshots/01_Main_Dashboard.png)
 
+
 ### 2. Doctors Dashboard
 Focuses on doctor-wise performance, revenue generation, patient distribution and satisfaction scores.
 
